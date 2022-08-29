@@ -1,0 +1,42 @@
+/* Query 1 - query used for first insight */
+SELECT c.Country AS TopCountries,
+       sum(i.total) AS InvoiceTotals
+FROM Customer c
+JOIN Invoice i ON c.CustomerId = i.CustomerId
+WHERE InvoiceDate BETWEEN '2010-01-01' AND '2010-12-31'
+GROUP BY TopCountries
+ORDER BY InvoiceTotals DESC
+LIMIT 10
+
+
+/* Query 2 - query used for second insight */
+SELECT a.Title AS AlbumTitle,
+       count(il.quantity) AS TotalSales
+FROM Album a
+JOIN Track t ON a.AlbumId = t.AlbumId
+JOIN InvoiceLine il ON t.TrackId = il.TrackId
+GROUP BY AlbumTitle
+ORDER BY TotalSales DESC
+LIMIT 5
+
+
+/* Query 3 - query used for third insight */
+SELECT g.name AS GenreType,
+       ROUND(avg(i.total), 2) AS AvgTotalSales_USD
+FROM Genre g
+JOIN Track t ON g.GenreId = t.GenreId
+JOIN InvoiceLine il ON t.TrackId = il.TrackId
+JOIN Invoice i ON il.InvoiceId = i.InvoiceId
+GROUP BY GenreType
+ORDER BY AvgTotalSales_USD DESC
+
+
+/* Query 4 - query used for fourth insight */
+SELECT p.name AS PlaylistName,
+       Max(t.Bytes) AS MaxBytes,
+       Min(t.Bytes) AS MinBytes
+FROM Playlist p
+JOIN PlaylistTrack pt ON p.PlaylistId = pt.PlaylistId
+JOIN Track t ON pt.TrackId = t.TrackId
+GROUP BY PlaylistName
+ORDER BY MaxBytes
